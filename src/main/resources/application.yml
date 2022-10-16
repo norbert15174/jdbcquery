@@ -6,7 +6,3 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   liquibase:
     change-log: classpath:changelog.xml
-  jpa:
-    show-sql: true
-server:
-  port: 8040
