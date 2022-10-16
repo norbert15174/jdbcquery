@@ -1,4 +1,4 @@
-package pl.jdbcqueryexample.jdbcquery.repository;
+package pl.jdbcqueryexample.jdbcquery.repository.base;
 
 import java.util.Set;
 

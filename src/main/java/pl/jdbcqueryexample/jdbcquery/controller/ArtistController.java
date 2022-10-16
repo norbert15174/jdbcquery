@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import pl.jdbcqueryexample.jdbcquery.dto.ArtistBasicDTO;
 import pl.jdbcqueryexample.jdbcquery.dto.ArtistCreateDTO;
+import pl.jdbcqueryexample.jdbcquery.dto.ArtistDTO;
 import pl.jdbcqueryexample.jdbcquery.dto.ArtistUpdateDTO;
 import pl.jdbcqueryexample.jdbcquery.exception.ValidationObjectException;
 import pl.jdbcqueryexample.jdbcquery.service.artist.IArtistService;
@@ -23,14 +24,20 @@ public class ArtistController {
     private final IArtistService artistService;
     private final ArtistValidator validator;
 
+
+    @GetMapping
+    public ResponseEntity <Set <ArtistBasicDTO>> getAll() {
+        return new ResponseEntity <>(artistService.getAllBasicArtistDTO() , HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity <ArtistBasicDTO> getById(@PathVariable Long id) {
         return new ResponseEntity <>(artistService.getBasicArtistDTOById(id) , HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity <Set <ArtistBasicDTO>> getById() {
-        return new ResponseEntity <>(artistService.getAllBasicArtistDTO() , HttpStatus.OK);
+    @GetMapping("/{id}/songs")
+    public ResponseEntity <ArtistDTO> getWithSongsById(@PathVariable Long id) {
+        return new ResponseEntity <>(artistService.getArtistDTOById(id) , HttpStatus.OK);
     }
 
     @PostMapping
@@ -54,7 +61,7 @@ public class ArtistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id){
+    public ResponseEntity <?> deleteById(@PathVariable Long id) {
         artistService.deleteById(id);
         return new ResponseEntity <>(HttpStatus.OK);
     }

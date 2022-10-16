@@ -1,6 +1,8 @@
 package pl.jdbcqueryexample.jdbcquery.service.artist.crud;
 
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jdbcqueryexample.jdbcquery.exception.EntityNotFoundException;
@@ -20,6 +22,11 @@ class ArtistQueryService implements IArtistQueryService {
     @Override
     public Optional <Artist> getByIdOpt(Long id) {
         return Optional.ofNullable(repository.findById(id));
+    }
+
+    @Override
+    public Optional <Artist> getWithSongsOpt(Long id) {
+        return Optional.ofNullable(repository.findWithSongsById(id));
     }
 
     @Override

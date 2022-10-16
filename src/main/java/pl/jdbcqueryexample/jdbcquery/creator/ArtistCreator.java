@@ -2,10 +2,11 @@ package pl.jdbcqueryexample.jdbcquery.creator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import pl.jdbcqueryexample.jdbcquery.dto.ArtistBasicDTO;
-import pl.jdbcqueryexample.jdbcquery.dto.ArtistCreateDTO;
-import pl.jdbcqueryexample.jdbcquery.dto.ArtistUpdateDTO;
+import pl.jdbcqueryexample.jdbcquery.dto.*;
 import pl.jdbcqueryexample.jdbcquery.model.Artist;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ArtistCreator {
@@ -24,6 +25,21 @@ public class ArtistCreator {
                 .name(entity.getName())
                 .lastName(entity.getLastName())
                 .nickname(entity.getNickname())
+                .build();
+    }
+
+    public static ArtistDTO artistDTOByArtist(Artist entity) {
+        List <SongBasicDTO> songs = new ArrayList <>();
+        for (var song : entity.getSongs()) {
+            songs.add(SongCreator.songBasicDtoBySong(song));
+        }
+
+        return ArtistDTO.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .lastName(entity.getLastName())
+                .nickname(entity.getNickname())
+                .songs(songs)
                 .build();
     }
 
