@@ -47,12 +47,6 @@ class SongRepositoryImpl implements ISongRepository, RowMapper <Song> {
 
     }
 
-    @Transactional
-    @Override
-    public void delete(Song entity) {
-
-    }
-
     @Transactional(readOnly = true)
     @Override
     public Song findById(Long id) {
@@ -61,7 +55,7 @@ class SongRepositoryImpl implements ISongRepository, RowMapper <Song> {
 
     @Transactional(readOnly = true)
     @Override
-    public Set <Song> finalAll() {
+    public Set <Song> findAll() {
         return null;
     }
 

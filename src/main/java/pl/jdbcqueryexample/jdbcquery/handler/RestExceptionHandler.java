@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import pl.jdbcqueryexample.jdbcquery.exception.EntityNotFoundException;
 import pl.jdbcqueryexample.jdbcquery.exception.ValidationObjectException;
 import pl.jdbcqueryexample.jdbcquery.model.ErrorMessage;
 import pl.jdbcqueryexample.jdbcquery.model.ValidationError;
@@ -32,6 +33,11 @@ public class RestExceptionHandler {
         );
         final var error = new ValidationError(HttpStatus.BAD_REQUEST.value() , "validation error" , errorMessages);
         return new ResponseEntity <>(error , HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity <?> handleValidationObjectException(EntityNotFoundException ex) {
+        return new ResponseEntity <>(ex.getMessage() , HttpStatus.BAD_REQUEST);
     }
 
 }

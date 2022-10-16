@@ -1,6 +1,7 @@
 package pl.jdbcqueryexample.jdbcquery.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +14,8 @@ import pl.jdbcqueryexample.jdbcquery.model.Artist;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,33 +40,42 @@ class ArtistRepositoryImpl implements IArtistRepository, RowMapper <Artist> {
 
     @Transactional
     @Override
-    public Artist update(Artist update) {
-        return null;
+    public Artist update(Artist entity) {
+        String sql = String.format("UPDATE artist SET name='%s', last_name='%s', nickname='%s' WHERE id=%d" , entity.getName() , entity.getLastName() , entity.getNickname() , entity.getId());
+        jdbcTemplate.update(sql);
+        return findById(entity.getId());
     }
 
-    @Transactional
-    @Override
-    public void deleteById(Long id) {
-
-    }
-
-    @Transactional
-    @Override
-    public void delete(Artist entity) {
-
-    }
 
     @Transactional(readOnly = true)
     @Override
     public Artist findById(Long id) {
         String sql = "SELECT * FROM artist WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql , this , id);
+        List <Artist> artist = jdbcTemplate.query(sql , this , id);
+        switch (artist.size()) {
+            case 0:
+                return null;
+            case 1:
+                return artist.get(0);
+            default:
+                throw new IncorrectResultSizeDataAccessException(artist.size());
+        }
     }
+
 
     @Transactional(readOnly = true)
     @Override
-    public Set <Artist> finalAll() {
-        return null;
+    public Set <Artist> findAll() {
+        String sql = "SELECT * FROM artist";
+        List <Artist> artists = jdbcTemplate.query(sql , this);
+        return new HashSet <>(artists);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        String sql = "DELETE FROM artist WHERE id = ?";
+        jdbcTemplate.update(sql , id);
     }
 
     @Override
@@ -75,4 +87,5 @@ class ArtistRepositoryImpl implements IArtistRepository, RowMapper <Artist> {
                 .nickname(rs.getString("nickname"))
                 .build();
     }
+
 }

@@ -2,18 +2,16 @@ package pl.jdbcqueryexample.jdbcquery.repository;
 
 import java.util.Set;
 
-public interface ICrudRepository<T, K> {
+public interface ICrudRepository<T, ID> {
 
     T save(T entity);
 
     T update(T update);
 
-    void deleteById(K id);
+    void deleteById(ID id);
 
-    void delete(T entity);
+    T findById(ID id);
 
-    T findById(K id);
-
-    Set <T> finalAll();
+    Set <T> findAll();
 
 }
